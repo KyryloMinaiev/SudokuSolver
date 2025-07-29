@@ -9,7 +9,6 @@ namespace Content.Features.WindowManagerModule.Scripts
             container
                 .Bind<WindowManager>()
                 .AsType<IWindowManager>()
-                .AsInitializable()
                 .Register();
         }
     }

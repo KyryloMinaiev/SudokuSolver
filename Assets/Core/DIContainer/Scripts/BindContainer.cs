@@ -1,58 +1,55 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Core.DIContainer.Scripts
 {
-    public struct BindContainer<T>
+    public readonly struct BindContainer<T>
     {
         private readonly T _value;
         private readonly DIContainer _diContainer;
         
-        public IInitializable Initializable { get; private set; }
-        public IUpdatable Updatable { get; private set; }
-        public ILateUpdatable LateUpdatable { get; private set; }
-        public IDisposable Disposable { get; private set; }
-        public HashSet<Type> Types { get; private set; }
+        public HashSet<Type> RegisteredDefaultTypes { get; }
+        public HashSet<Type> Types { get; }
         
-        public BindContainer(T value, DIContainer diContainer)
+        public BindContainer(T value, DIContainer diContainer, HashSet<Type> defaultTypes)
         {
             _value = value;
-            Initializable = null;
-            Updatable = null;
-            LateUpdatable = null;
-            Disposable = null;
+            RegisteredDefaultTypes = new HashSet<Type>();
             Types = new HashSet<Type>();
             _diContainer = diContainer;
-        }
-        
-        public BindContainer<T> AsInitializable()
-        {
-            Initializable = _value as IInitializable;
-            return this;
-        }
-        
-        public BindContainer<T> AsUpdatable()
-        {
-            Updatable = _value as IUpdatable;
-            return this;
+
+            RegisterDefaultTypes(defaultTypes);
         }
 
-        public BindContainer<T> AsLateUpdatable()
+        private void RegisterDefaultTypes(HashSet<Type> defaultTypes)
         {
-            LateUpdatable = _value as ILateUpdatable;
-            return this;
+            foreach (var type in defaultTypes)
+            {
+                RegisterDefaultType(type);
+            }
         }
 
-        public BindContainer<T> AsType<TType>()
+        private void RegisterDefaultType(Type type)
+        {
+            if (type.IsAssignableFrom(typeof(T)))
+            {
+                RegisteredDefaultTypes.Add(type);
+            }
+        }
+        
+        public BindContainer<T> AsType<TType>() where TType : class
         {
             Type type = typeof(TType);
-            Types.Add(type);
-            return this;
-        }
-
-        public BindContainer<T> AsDisposable()
-        {
-            Disposable = _value as IDisposable;
+            if (_value is TType)
+            {
+                Types.Add(type);
+            }
+            else
+            {
+                Debug.LogError($"Type {type} is not assignable from {typeof(T)}");
+            }
+            
             return this;
         }
 

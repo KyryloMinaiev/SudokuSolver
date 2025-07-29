@@ -9,8 +9,6 @@ namespace Content.Features.LoadingScreenModule.Scripts
             container
                 .Bind<LoadingScreenController>()
                 .AsType<LoadingScreenController>()
-                .AsInitializable()
-                .AsDisposable()
                 .Register();
         }
     }

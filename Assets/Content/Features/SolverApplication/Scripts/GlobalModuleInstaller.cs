@@ -23,7 +23,6 @@ namespace Content.Features.SolverApplication.Scripts
             container
                 .Bind<SolverApplicationLoadingService>()
                 .AsType<ILoadingService>()
-                .AsUpdatable()
                 .Register();
             
             container
