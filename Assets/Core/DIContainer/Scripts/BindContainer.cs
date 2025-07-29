@@ -1,58 +1,49 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Core.DIContainer.Scripts
 {
-    public struct BindContainer<T>
+    public readonly struct BindContainer<T>
     {
         private readonly T _value;
         private readonly DIContainer _diContainer;
         
-        public IInitializable Initializable { get; private set; }
-        public IUpdatable Updatable { get; private set; }
-        public ILateUpdatable LateUpdatable { get; private set; }
-        public IDisposable Disposable { get; private set; }
-        public HashSet<Type> Types { get; private set; }
+        public HashSet<Type> Types { get; }
         
         public BindContainer(T value, DIContainer diContainer)
         {
             _value = value;
-            Initializable = null;
-            Updatable = null;
-            LateUpdatable = null;
-            Disposable = null;
             Types = new HashSet<Type>();
             _diContainer = diContainer;
-        }
-        
-        public BindContainer<T> AsInitializable()
-        {
-            Initializable = _value as IInitializable;
-            return this;
-        }
-        
-        public BindContainer<T> AsUpdatable()
-        {
-            Updatable = _value as IUpdatable;
-            return this;
+            
+            RegisterInterface<IInitializable>();
+            RegisterInterface<IUpdatable>();
+            RegisterInterface<ILateUpdatable>();
+            RegisterInterface<IDisposable>();
         }
 
-        public BindContainer<T> AsLateUpdatable()
+        private void RegisterInterface<TType>() where TType : class
         {
-            LateUpdatable = _value as ILateUpdatable;
-            return this;
+            var interfaceType = typeof(TType);
+            if (_value is TType)
+            {
+                Types.Add(interfaceType);
+            }
         }
-
-        public BindContainer<T> AsType<TType>()
+        
+        public BindContainer<T> AsType<TType>() where TType : class
         {
             Type type = typeof(TType);
-            Types.Add(type);
-            return this;
-        }
-
-        public BindContainer<T> AsDisposable()
-        {
-            Disposable = _value as IDisposable;
+            if (_value is TType)
+            {
+                Types.Add(type);
+            }
+            else
+            {
+                Debug.LogError($"Type {type} is not assignable from {typeof(T)}");
+            }
+            
             return this;
         }
 
