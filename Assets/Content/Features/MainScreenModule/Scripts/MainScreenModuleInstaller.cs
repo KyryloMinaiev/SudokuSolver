@@ -34,7 +34,6 @@ namespace Content.Features.MainScreenModule.Scripts
             container
                 .Bind<MainScreenFlowService>()
                 .AsType<IMainScreenFlowService>()
-                .AsDisposable()
                 .Register();
             
             container
@@ -45,7 +44,6 @@ namespace Content.Features.MainScreenModule.Scripts
             container
                 .Bind<MainScreenController>()
                 .AsType<MainScreenController>()
-                .AsInitializable()
                 .Register();
 
             container

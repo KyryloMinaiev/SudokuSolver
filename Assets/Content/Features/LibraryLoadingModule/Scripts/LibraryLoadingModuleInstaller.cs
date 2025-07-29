@@ -26,7 +26,6 @@ namespace Content.Features.LibraryLoadingModule.Scripts
             container
                 .Bind<LoadingLibraryController>()
                 .AsType<LoadingLibraryController>()
-                .AsInitializable()
                 .Register();
 
             container.Get<IApplicationModuleContainer>()

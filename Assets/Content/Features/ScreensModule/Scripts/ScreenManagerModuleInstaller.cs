@@ -9,7 +9,6 @@ namespace Content.Features.ScreensModule.Scripts
             container
                 .Bind<ScreenManager>()
                 .AsType<IScreenManager>()
-                .AsInitializable()
                 .Register();
         }
     }
