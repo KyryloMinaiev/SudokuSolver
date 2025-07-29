@@ -9,26 +9,32 @@ namespace Core.DIContainer.Scripts
         private readonly T _value;
         private readonly DIContainer _diContainer;
         
+        public HashSet<Type> RegisteredDefaultTypes { get; }
         public HashSet<Type> Types { get; }
         
-        public BindContainer(T value, DIContainer diContainer)
+        public BindContainer(T value, DIContainer diContainer, HashSet<Type> defaultTypes)
         {
             _value = value;
+            RegisteredDefaultTypes = new HashSet<Type>();
             Types = new HashSet<Type>();
             _diContainer = diContainer;
-            
-            RegisterInterface<IInitializable>();
-            RegisterInterface<IUpdatable>();
-            RegisterInterface<ILateUpdatable>();
-            RegisterInterface<IDisposable>();
+
+            RegisterDefaultTypes(defaultTypes);
         }
 
-        private void RegisterInterface<TType>() where TType : class
+        private void RegisterDefaultTypes(HashSet<Type> defaultTypes)
         {
-            var interfaceType = typeof(TType);
-            if (_value is TType)
+            foreach (var type in defaultTypes)
             {
-                Types.Add(interfaceType);
+                RegisterDefaultType(type);
+            }
+        }
+
+        private void RegisterDefaultType(Type type)
+        {
+            if (type.IsAssignableFrom(typeof(T)))
+            {
+                RegisteredDefaultTypes.Add(type);
             }
         }
         

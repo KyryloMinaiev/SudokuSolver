@@ -8,34 +8,38 @@ namespace Core.DIContainer.Scripts
 {
     public class DIContainer : MonoBehaviour
     {
+        private HashSet<Type> _defaultTypes = new HashSet<Type>
+            { typeof(IInitializable), typeof(IDisposable), typeof(IUpdatable), typeof(ILateUpdatable) };
+
+        private readonly HashSet<IInitializable> _initializables = new HashSet<IInitializable>();
         private readonly HashSet<IUpdatable> _updatables = new HashSet<IUpdatable>();
         private readonly HashSet<ILateUpdatable> _lateUpdatables = new HashSet<ILateUpdatable>();
         private readonly HashSet<IDisposable> _disposables = new HashSet<IDisposable>();
         private readonly Dictionary<Type, object> _savedTypes = new Dictionary<Type, object>();
 
         private readonly List<object> _tempParametersList = new List<object>();
-        
+
         public BindContainer<T> Bind<T>() where T : class
         {
             var type = typeof(T);
             var ctor = SelectConstructor(type);
             var parameters = ctor.GetParameters();
-            
+
             _tempParametersList.Clear();
             foreach (var parameter in parameters)
             {
                 if (_savedTypes.TryGetValue(parameter.ParameterType, out var value))
                 {
-                    _tempParametersList.Add(value);   
+                    _tempParametersList.Add(value);
                 }
                 else
                 {
                     throw new Exception($"Cannot resolve dependency {parameter.ParameterType.Name} for {type.Name}");
                 }
             }
-            
+
             T instance = Activator.CreateInstance(type, _tempParametersList.ToArray()) as T;
-            return new BindContainer<T>(instance, this);
+            return new BindContainer<T>(instance, this, _defaultTypes);
         }
 
         public T Get<T>() where T : class
@@ -44,7 +48,7 @@ namespace Core.DIContainer.Scripts
             {
                 return value as T;
             }
-            
+
             return null;
         }
 
@@ -57,10 +61,10 @@ namespace Core.DIContainer.Scripts
 
         public void RegisterBindContainer<T>(BindContainer<T> bindContainer)
         {
-            RegisterInterface(bindContainer.Updatable, _updatables);
-            RegisterInterface(bindContainer.LateUpdatable, _lateUpdatables);
-            RegisterInterface(bindContainer.Disposable, _disposables);
-            RegisterInitializable(bindContainer.Initializable);
+            RegisterInterface(bindContainer, bindContainer.RegisteredDefaultTypes, _initializables);
+            RegisterInterface(bindContainer, bindContainer.RegisteredDefaultTypes, _updatables);
+            RegisterInterface(bindContainer, bindContainer.RegisteredDefaultTypes, _lateUpdatables);
+            RegisterInterface(bindContainer, bindContainer.RegisteredDefaultTypes, _disposables);
             RegisterTypes<T>(bindContainer, bindContainer.Types);
         }
 
@@ -81,11 +85,13 @@ namespace Core.DIContainer.Scripts
             }
         }
 
-        private void RegisterInterface<T>(T interfaceObject, HashSet<T> set)
+        private void RegisterInterface<TContainer, TInterface>(TContainer obj, HashSet<Type> registeredContainerTypes,
+            HashSet<TInterface> interfaceSet) where TInterface : class
         {
-            if (interfaceObject != null)
+            Type interfaceType = typeof(TInterface);
+            if (registeredContainerTypes.Contains(interfaceType))
             {
-                set.Add(interfaceObject);
+                interfaceSet.Add(obj as TInterface);
             }
         }
 
@@ -94,7 +100,7 @@ namespace Core.DIContainer.Scripts
             if (initializable != null)
             {
                 initializable.Initialize();
-            }   
+            }
         }
 
         private void Awake()
@@ -102,9 +108,15 @@ namespace Core.DIContainer.Scripts
             gameObject.hideFlags = HideFlags.HideAndDontSave;
             DontDestroyOnLoad(gameObject);
         }
-        
+
         private void Update()
         {
+            foreach (var initializable in _initializables)
+            {
+                initializable.Initialize();
+            }
+            
+            _initializables.Clear();
             foreach (var updatable in _updatables)
             {
                 updatable.Update();
@@ -125,7 +137,7 @@ namespace Core.DIContainer.Scripts
             {
                 disposable.Dispose();
             }
-            
+
             _savedTypes.Clear();
         }
     }
