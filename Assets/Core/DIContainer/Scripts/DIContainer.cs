@@ -61,10 +61,10 @@ namespace Core.DIContainer.Scripts
 
         public void RegisterBindContainer<T>(BindContainer<T> bindContainer)
         {
-            RegisterInterface(bindContainer, bindContainer.RegisteredDefaultTypes, _initializables);
-            RegisterInterface(bindContainer, bindContainer.RegisteredDefaultTypes, _updatables);
-            RegisterInterface(bindContainer, bindContainer.RegisteredDefaultTypes, _lateUpdatables);
-            RegisterInterface(bindContainer, bindContainer.RegisteredDefaultTypes, _disposables);
+            RegisterInterface<T, IInitializable>(bindContainer, bindContainer.RegisteredDefaultTypes, _initializables);
+            RegisterInterface<T, IUpdatable>(bindContainer, bindContainer.RegisteredDefaultTypes, _updatables);
+            RegisterInterface<T, ILateUpdatable>(bindContainer, bindContainer.RegisteredDefaultTypes, _lateUpdatables);
+            RegisterInterface<T, IDisposable>(bindContainer, bindContainer.RegisteredDefaultTypes, _disposables);
             RegisterTypes<T>(bindContainer, bindContainer.Types);
         }
 
@@ -92,14 +92,6 @@ namespace Core.DIContainer.Scripts
             if (registeredContainerTypes.Contains(interfaceType))
             {
                 interfaceSet.Add(obj as TInterface);
-            }
-        }
-
-        private void RegisterInitializable(IInitializable initializable)
-        {
-            if (initializable != null)
-            {
-                initializable.Initialize();
             }
         }
 
