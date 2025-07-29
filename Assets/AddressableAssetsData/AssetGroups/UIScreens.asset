@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: UIScreens
+  m_EditorClassIdentifier: 
+  m_GroupName: UIScreens
+  m_Data:
+    m_SerializedData: []
+  m_GUID: c82ef82fceee7f8419a3826ebd610dc7
+  m_SerializeEntries:
+  - m_GUID: 736e6dd7a991f5247a7b6fe5989e33e6
+    m_Address: Assets/Content/Features/MainScreenModule/GameResources/MainScreen.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e83e775dc72e94046955006c8d193d9f
+    m_Address: Assets/Content/Features/ScreensModule/GameResources/MainCanvasContainer.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e991f68ca88da9049a1d4400f849d109
+    m_Address: Assets/Content/Features/LoadingScreenModule/GameResources/LoadingScreen.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f047f45883d291e4283c86ac374c23c2
+    m_Address: Assets/Content/Features/LibraryLoadingModule/GameResources/LibraryLoadingScreen.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: 06886f9474cbdfd42bd84628b7d6a1a9, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 3cfe9822b0992f84e9e9f5387e88811d, type: 2}
+    - {fileID: 11400000, guid: eec8a93b13cd6b64aa5410ab44b02e2b, type: 2}
