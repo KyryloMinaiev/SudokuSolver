@@ -5,7 +5,7 @@
         void InitializeScreen(MainScreen screen);
         void ShowSudokuGridDataList();
         void StartSudokuGridDataCreation();
-        void StartSudokuGridDataEdit(int gridID);
+        void StartSudokuGridDataEdit(long gridID);
         void StartSudokuGridChallengeSolving();
         void StartSudokuGridChallengeCreation();
     }

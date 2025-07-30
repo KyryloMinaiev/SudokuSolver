@@ -56,7 +56,7 @@ namespace Core.SudokuLibraryModule.Scripts
             RemoveAllChallengesForGrid(gridData.GridID);
         }
         
-        public void RemoveGridData(int gridID)
+        public void RemoveGridData(long gridID)
         {
             for (int i = _sudokuGrids.Count - 1; i >= 0; i--)
             {
@@ -71,7 +71,7 @@ namespace Core.SudokuLibraryModule.Scripts
             RemoveAllChallengesForGrid(gridID);
         }
 
-        public SudokuGridData GetGridData(int gridID)
+        public SudokuGridData GetGridData(long gridID)
         {
             foreach (SudokuGridData gridData in _sudokuGrids)
             {
@@ -84,7 +84,7 @@ namespace Core.SudokuLibraryModule.Scripts
             return null;
         }
 
-        private void RemoveAllChallengesForGrid(int gridID)
+        private void RemoveAllChallengesForGrid(long gridID)
         {
             for (int i = _sudokuChallenges.Count - 1; i >= 0; i--)
             {
@@ -95,7 +95,7 @@ namespace Core.SudokuLibraryModule.Scripts
             }
         }
 
-        public List<SudokuChallengeData> GetGridChallenges(int gridID)
+        public List<SudokuChallengeData> GetGridChallenges(long gridID)
         {
             List<SudokuChallengeData> result = new List<SudokuChallengeData>();
             foreach (SudokuChallengeData challengeData in _sudokuChallenges)
@@ -109,7 +109,7 @@ namespace Core.SudokuLibraryModule.Scripts
             return result;
         }
 
-        public SudokuChallengeData GetChallengeData(int challengeID)
+        public SudokuChallengeData GetChallengeData(long challengeID)
         {
             foreach (SudokuChallengeData challengeData in _sudokuChallenges)
             {

@@ -44,7 +44,7 @@ namespace Content.Features.MainScreenModule.Scripts
                 () => _mainScreen.ShowSudokuGridDataCreationPanel(_sudokuGridDataCreationPanelViewModel));
         }
 
-        public void StartSudokuGridDataEdit(int gridID)
+        public void StartSudokuGridDataEdit(long gridID)
         {
         }
 

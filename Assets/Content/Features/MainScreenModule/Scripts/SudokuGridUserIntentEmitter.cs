@@ -4,7 +4,7 @@ namespace Content.Features.MainScreenModule.Scripts
 {
     public class SudokuGridUserIntentEmitter : ISudokuGridUserIntentEmitter, ISudokuGridUserIntentListener
     {
-        public void RequestEdit(int gridId)
+        public void RequestEdit(long gridId)
         {
             OnGridEditRequested?.Invoke(gridId);
         }
@@ -14,7 +14,7 @@ namespace Content.Features.MainScreenModule.Scripts
             OnGridCreationRequested?.Invoke();
         }
 
-        public event Action<int> OnGridEditRequested;
+        public event Action<long> OnGridEditRequested;
         public event Action OnGridCreationRequested;
     }
 }

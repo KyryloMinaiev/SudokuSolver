@@ -7,14 +7,14 @@ namespace Core.SudokuLibraryModule.Scripts
     public class SudokuChallengeData
     {
         [SerializeField]
-        private int _gridID;
+        private long _gridID;
         [SerializeField]
-        private int _challengeID;
+        private long _challengeID;
         
-        public int GridID => _gridID;
-        public int ChallengeID => _challengeID;
+        public long GridID => _gridID;
+        public long ChallengeID => _challengeID;
         
-        public SudokuChallengeData(int gridID, int challengeID)
+        public SudokuChallengeData(long gridID, long challengeID)
         {
             _gridID = gridID;
             _challengeID = challengeID;
