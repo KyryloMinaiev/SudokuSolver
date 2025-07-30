@@ -1,4 +1,6 @@
-﻿using Content.Features.WindowManagerModule.Scripts;
+﻿using System;
+using Content.Features.WindowManagerModule.Scripts;
+using Core.DIContainer.Scripts;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,16 +19,18 @@ namespace Content.Features.LibraryLoadingModule.Scripts.Windows
         
         private LibrarySelectionViewModel _librarySelectionViewModel;
         
-        public void Initialize(LibrarySelectionViewModel librarySelectionViewModel,
-                bool showCancelButton)
+        [Inject]
+        public void Initialize(LibrarySelectionViewModel librarySelectionViewModel)
         {
             _librarySelectionViewModel = librarySelectionViewModel;
-            
+        }
+
+        private void OnEnable()
+        {
             _openFileDialogButton.onClick.AddListener(_librarySelectionViewModel.ChoosePathCommand);
             _cancelButton.onClick.AddListener(_librarySelectionViewModel.CancelCommand);
             _createLibraryButton.onClick.AddListener(_librarySelectionViewModel.CreateNewLibraryCommand);
             _openLibraryButton.onClick.AddListener(_librarySelectionViewModel.OpenLibraryCommand);
-            _cancelButton.gameObject.SetActive(showCancelButton);
 
             SubscribeToViewModel();
         }
@@ -61,6 +65,7 @@ namespace Content.Features.LibraryLoadingModule.Scripts.Windows
             _createLibraryButton.onClick.RemoveListener(_librarySelectionViewModel.CreateNewLibraryCommand);
             _openLibraryButton.onClick.RemoveListener(_librarySelectionViewModel.OpenLibraryCommand);
             _librarySelectionViewModel.SelectedPath.Unsubscribe(UpdateLibraryPathText);
+            _librarySelectionViewModel.ShowCancelButton.Unsubscribe(UpdateCancelButtonVisibility);
         }
     }
 }

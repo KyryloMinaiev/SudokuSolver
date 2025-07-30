@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Core.DIContainer.Scripts;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Content.Features.MainScreenModule.Scripts.ApplicationControlPanel
@@ -11,10 +12,14 @@ namespace Content.Features.MainScreenModule.Scripts.ApplicationControlPanel
         
         private ApplicationControlPanelViewModel _viewModel;
         
+        [Inject]
         public void Initialize(ApplicationControlPanelViewModel viewModel)
         {
             _viewModel = viewModel;
-            
+        }
+
+        private void OnEnable()
+        {
             _homeButton.onClick.AddListener(_viewModel.HomeButtonCommand);
             _loadLibraryButton.onClick.AddListener(_viewModel.LoadLibraryCommand);
             _exitButton.onClick.AddListener(_viewModel.CloseApplicationCommand);
@@ -22,9 +27,9 @@ namespace Content.Features.MainScreenModule.Scripts.ApplicationControlPanel
         
         private void OnDisable()
         {
-            _homeButton.onClick.RemoveAllListeners();
-            _loadLibraryButton.onClick.RemoveAllListeners();
-            _exitButton.onClick.RemoveAllListeners();
+            _homeButton.onClick.RemoveListener(_viewModel.HomeButtonCommand);
+            _loadLibraryButton.onClick.RemoveListener(_viewModel.LoadLibraryCommand);
+            _exitButton.onClick.RemoveListener(_viewModel.CloseApplicationCommand);
         }
     }
 }

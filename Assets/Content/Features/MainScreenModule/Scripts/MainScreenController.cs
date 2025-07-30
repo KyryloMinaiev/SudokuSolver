@@ -10,16 +10,14 @@ namespace Content.Features.MainScreenModule.Scripts
     {
         private readonly IScreenManager _screenManager;
         private readonly IMainScreenFlowService _mainScreenFlowService;
-        private readonly ApplicationControlPanelViewModel _applicationControlPanelViewModel;
         
         private MainScreen _mainScreen;
 
         public MainScreenController(IScreenManager screenManager, IMainScreenFlowService mainScreenFlowService,
-            ApplicationControlPanelViewModel applicationControlPanelViewModel, SudokuGridDataPanelViewModel sudokuGridDataPanelViewModel)
+            ApplicationControlPanelViewModel applicationControlPanelViewModel)
         {
             _screenManager = screenManager;
             _mainScreenFlowService = mainScreenFlowService;
-            _applicationControlPanelViewModel = applicationControlPanelViewModel;
         }
 
         public void Initialize()
@@ -30,7 +28,6 @@ namespace Content.Features.MainScreenModule.Scripts
         public void ShowMainScreen()
         {
             _mainScreen = _screenManager.ShowScreen<MainScreen>();
-            _mainScreen.Initialize(_applicationControlPanelViewModel);
             _mainScreenFlowService.InitializeScreen(_mainScreen);
             _mainScreenFlowService.ShowSudokuGridDataList();
         }

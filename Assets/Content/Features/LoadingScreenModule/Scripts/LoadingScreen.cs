@@ -1,4 +1,5 @@
 ﻿using Content.Features.ScreensModule.Scripts;
+using Core.DIContainer.Scripts;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,9 +14,14 @@ namespace Content.Features.LoadingScreenModule.Scripts
         
         private LoadingScreenViewModel _viewModel;
         
+        [Inject]
         public void Initialize(LoadingScreenViewModel viewModel)
         {
             _viewModel = viewModel;
+        }
+
+        private void OnEnable()
+        {
             _viewModel.TaskProgress.Subscribe(UpdateTaskProgress);
             _viewModel.TaskDescription.Subscribe(UpdateTaskDescription);
         }

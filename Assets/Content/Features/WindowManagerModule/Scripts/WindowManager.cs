@@ -5,34 +5,25 @@ using Core.AssetLoaderModule.Scripts;
 using Core.DIContainer.Scripts;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Content.Features.WindowManagerModule.Scripts
 {
-    public struct WindowData
-    {
-        public readonly BaseUIWindow Window;
-        public readonly GameObject WindowContainer;
-        
-        public WindowData(BaseUIWindow window, GameObject windowContainer)
-        {
-            Window = window;
-            WindowContainer = windowContainer;
-        }
-    }
-    
     public class WindowManager : IWindowManager, IInitializable
     {
+        private readonly DIContainer _container;
         private readonly IAssetLoader _assetLoader;
         private readonly IScreenManager _screenManager;
-        private readonly Dictionary<string, WindowData> _createdWindows;
+        private readonly Dictionary<string, BaseUIWindow> _createdWindows;
         
         private Transform _mainCanvasTransform;
 
-        public WindowManager(IAssetLoader assetLoader, IScreenManager screenManager)
+        public WindowManager(IAssetLoader assetLoader, IScreenManager screenManager, DIContainer container)
         {
             _assetLoader = assetLoader;
+            _container = container;
             _screenManager = screenManager;
-            _createdWindows = new Dictionary<string, WindowData>();
+            _createdWindows = new Dictionary<string, BaseUIWindow>();
         }
         
         public async UniTask PrepareWindow<T>(string windowKey, Action<T> onWindowReady = null) where T : BaseUIWindow
@@ -43,37 +34,20 @@ namespace Content.Features.WindowManagerModule.Scripts
             }
             
             GameObject windowPrefab = await _assetLoader.LoadAssetAsync<GameObject>(windowKey);
-            GameObject windowContainer = CreateWindowContainer(windowKey);
-            GameObject windowObject = UnityEngine.Object.Instantiate(windowPrefab, windowContainer.transform);
-            T window = windowObject.GetComponent<T>();
+            T window = _container.InstantiateComponent<T>(windowPrefab, _mainCanvasTransform);
             if (window != null)
             {
-                SetupNewWindow(windowKey, windowContainer, window, onWindowReady);
+                SetupNewWindow(windowKey, window, onWindowReady);
             }
             else
             {
-                DestroyWindowContainer(windowContainer);
+                Object.Destroy(window.gameObject);
             }
         }
 
-        private GameObject CreateWindowContainer(string windowKey)
+        private void SetupNewWindow<T>(string windowKey, T window, Action<T> onWindowReady = null) where T : BaseUIWindow
         {
-            GameObject windowContainer = new GameObject($"Container-{windowKey}");
-            windowContainer.transform.SetParent(_mainCanvasTransform);
-            windowContainer.transform.localScale = Vector3.one;
-            windowContainer.transform.localPosition = Vector3.zero;
-            windowContainer.SetActive(false);
-            return windowContainer;
-        }
-
-        private void DestroyWindowContainer(GameObject windowContainer)
-        {
-            UnityEngine.Object.Destroy(windowContainer);
-        }
-
-        private void SetupNewWindow<T>(string windowKey, GameObject windowContainer, T window, Action<T> onWindowReady = null) where T : BaseUIWindow
-        {
-            _createdWindows[windowKey] = new WindowData(window, windowContainer);
+            _createdWindows[windowKey] = window;
             HideWindow(windowKey);
             onWindowReady?.Invoke(window);
         }
@@ -85,26 +59,26 @@ namespace Content.Features.WindowManagerModule.Scripts
                 return null;
             }
             
-            if (!_createdWindows.TryGetValue(windowKey, out var windowData))
+            if (!_createdWindows.TryGetValue(windowKey, out var window))
             {
                 return null;
             }
             
-            SetupWindowContainer(windowData.WindowContainer, parentScreen.transform, true);
-            return (TWindow)windowData.Window;
+            SetupWindow(window, parentScreen.transform, true);
+            return (TWindow)window;
         }
 
-        private void SetupWindowContainer(GameObject windowContainer, Transform parent, bool enabled)
+        private void SetupWindow(BaseUIWindow window, Transform parent, bool enabled)
         {
-            windowContainer.gameObject.SetActive(enabled);
-            windowContainer.transform.SetParent(parent);
+            window.gameObject.SetActive(enabled);
+            window.transform.SetParent(parent);
         }
 
         public void HideWindow(string windowKey)
         {
-            if (_createdWindows.TryGetValue(windowKey, out var windowData))
+            if (_createdWindows.TryGetValue(windowKey, out var window))
             {
-                windowData.WindowContainer.SetActive(false);
+                window.gameObject.SetActive(false);
             }
         }
 
