@@ -185,7 +185,7 @@ namespace Core.DIContainer.Scripts
                 InjectIntoComponent(component);
             }
             
-            var childComponents = obj.GetComponentsInChildren<MonoBehaviour>();
+            var childComponents = obj.GetComponentsInChildren<MonoBehaviour>(true);
             foreach (var component in childComponents)
             {
                 InjectIntoComponent(component);
