@@ -99,6 +99,12 @@ namespace Core.DIContainer.Scripts
         {
             gameObject.hideFlags = HideFlags.HideAndDontSave;
             DontDestroyOnLoad(gameObject);
+            RegisterSelf();
+        }
+
+        private void RegisterSelf()
+        {
+            _savedTypes.Add(typeof(DIContainer), this);
         }
 
         private void Update()
