@@ -5,6 +5,7 @@ namespace Global.Scripts.Generated {
         public static HashSet<string> AllKeys = new() {
             "WindowRegistry",
             "MainScene",
+            "SpriteAtlas",
             "MainScreen",
             "MainCanvasContainer",
             "LoadingScreen",
@@ -12,6 +13,7 @@ namespace Global.Scripts.Generated {
             "Application",
             "DIContainer",
             "SelectLibraryWindow",
+            "ColorSchemeConfiguration",
         }; 
         public static class Registries { 
             public const System.String WindowRegistry = "Assets/Content/Features/WindowManagerModule/GameResources/WindowRegistry.asset"; 
@@ -24,6 +26,13 @@ namespace Global.Scripts.Generated {
             public const System.String MainScene = "MainScene"; 
             public static HashSet<string> AllKeys = new() {
                 "MainScene",
+            }; 
+        } 
+
+        public static class Sprites { 
+            public const System.String SpriteAtlas = "Assets/GameResources/Sprites/SpriteAtlas.spriteatlasv2"; 
+            public static HashSet<string> AllKeys = new() {
+                "SpriteAtlas",
             }; 
         } 
 
@@ -53,6 +62,13 @@ namespace Global.Scripts.Generated {
             public const System.String SelectLibraryWindow = "SelectLibraryWindow"; 
             public static HashSet<string> AllKeys = new() {
                 "SelectLibraryWindow",
+            }; 
+        } 
+
+        public static class ScriptableObjects { 
+            public const System.String ColorSchemeConfiguration = "Assets/Core/ColorSchemeModule/GameResources/ColorSchemeConfiguration.asset"; 
+            public static HashSet<string> AllKeys = new() {
+                "ColorSchemeConfiguration",
             }; 
         } 
 

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Core.AssetLoaderModule.Scripts;
 using Core.DIContainer.Scripts;
+using Global.Scripts.Generated;
 
 namespace Core.ColorSchemeModule.Scripts
 {
@@ -16,7 +17,7 @@ namespace Core.ColorSchemeModule.Scripts
 
         public async void Initialize()
         {
-            var configuration = await _assetLoader.LoadAssetAsync<ColorSchemeConfiguration>("ColorSchemeConfiguration");
+            var configuration = await _assetLoader.LoadAssetAsync<ColorSchemeConfiguration>(Address.ScriptableObjects.ColorSchemeConfiguration);
             _colorSchemes = configuration.ColorSchemes;
         }
         
