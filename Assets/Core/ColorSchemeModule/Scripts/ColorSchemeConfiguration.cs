@@ -6,8 +6,8 @@ namespace Core.ColorSchemeModule.Scripts
     [CreateAssetMenu(fileName = "ColorSchemeConfiguration", menuName = "Sudoku/ColorSchemeConfiguration", order = 0)]
     public class ColorSchemeConfiguration : ScriptableObject
     {
-        [SerializeField] private List<ColorRole> _colorRoles;
-        [SerializeField] private List<ColorScheme> _colorSchemes;
+        [SerializeField] private List<ColorRole> _colorRoles = new List<ColorRole>();
+        [SerializeField] private List<ColorScheme> _colorSchemes = new List<ColorScheme>();
         
         public List<ColorRole> ColorRoles => _colorRoles;
         public List<ColorScheme> ColorSchemes => _colorSchemes;
