@@ -21,7 +21,7 @@ namespace Content.Features.LoadingScreenModule.Scripts
         
         public void Initialize()
         {
-            _screenManager.PrepareScreen<LoadingScreen>(Address.UIScreens.LoadingScreen, OnLoadingScreenLoaded);
+            _screenManager.PrepareScreen<LoadingScreen>(Address.UIScreens.LoadingScreen);
             _loadingService.OnCurrentTaskCompleted += OnCurrentTaskCompleted;
             _loadingService.OnTaskStarted += OnTaskStarted;
             _loadingService.OnCurrentTaskProgressChanged += OnCurrentTaskProgressChanged;
@@ -32,11 +32,6 @@ namespace Content.Features.LoadingScreenModule.Scripts
             _loadingService.OnCurrentTaskCompleted -= OnCurrentTaskCompleted;
             _loadingService.OnTaskStarted -= OnTaskStarted;
             _loadingService.OnCurrentTaskProgressChanged -= OnCurrentTaskProgressChanged;
-        }
-
-        private void OnLoadingScreenLoaded(LoadingScreen loadingScreen)
-        {
-            loadingScreen.Initialize(_loadingScreenViewModel);
         }
 
         private void OnCurrentTaskProgressChanged(float progress)

@@ -12,6 +12,7 @@ using Core.DIContainer.Scripts;
 using Core.FileBrowserModule.Scripts;
 using Core.LoadingServiceModule.Scripts;
 using Core.SceneLoadingModule.Scripts;
+using Core.SudokuGeneratorModule.Scripts;
 using Core.SudokuLibraryModule.Scripts;
 
 namespace Content.Features.SolverApplication.Scripts
@@ -38,6 +39,8 @@ namespace Content.Features.SolverApplication.Scripts
             container.Install<ScreenManagerModuleInstaller>();
             container.Install<WindowManagerModuleInstaller>();
             container.Install<ApplicationClosingModuleInstaller>();
+            
+            container.Install<SudokuGeneratorModuleInstaller>();
 
             container.Install<LoadingScreenModuleInstaller>();
             container.Install<BootModuleInstaller>();

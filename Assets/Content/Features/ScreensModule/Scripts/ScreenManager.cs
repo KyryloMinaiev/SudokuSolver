@@ -10,14 +10,16 @@ namespace Content.Features.ScreensModule.Scripts
 {
     public class ScreenManager : IScreenManager, IInitializable
     {
+        private readonly DIContainer _container;
         private readonly IAssetLoader _assetLoader;
         private readonly HashSet<string> _preparedScreens;
         private readonly Dictionary<Type, BaseUIScreen> _createdScreens;
         private MainCanvasContainer _mainCanvasContainer;
 
-        public ScreenManager(IAssetLoader assetLoader)
+        public ScreenManager(IAssetLoader assetLoader, DIContainer container)
         {
             _assetLoader = assetLoader;
+            _container = container;
             _createdScreens = new Dictionary<Type, BaseUIScreen>();
             _preparedScreens = new HashSet<string>();
         }
@@ -32,8 +34,7 @@ namespace Content.Features.ScreensModule.Scripts
             }
             
             GameObject screenPrefab = await _assetLoader.LoadAssetAsync<GameObject>(screenPrefabPath);
-            GameObject screenObject = UnityEngine.Object.Instantiate(screenPrefab, _mainCanvasContainer.MainCanvasTransform);
-            T screen = screenObject.GetComponent<T>();
+            T screen = _container.InstantiateComponent<T>(screenPrefab, _mainCanvasContainer.MainCanvasTransform);
             if (screen != null)
             {
                 SetupScreen(screen, screenPrefabPath, onScreenReady);
@@ -41,7 +42,7 @@ namespace Content.Features.ScreensModule.Scripts
             else
             {
                 Debug.LogError($"[ScreenManager] Screen {screenPrefabPath} does not have {typeof(T)} component!");
-                DestroyScreenObject(screenObject);
+                DestroyScreenObject(screen.gameObject);
             }
         }
 
@@ -92,8 +93,7 @@ namespace Content.Features.ScreensModule.Scripts
         public void Initialize()
         {
             var mainCanvasContainerPrefab = _assetLoader.LoadAsset<GameObject>(Address.UIScreens.MainCanvasContainer);
-            var mainCanvasContainerObject = UnityEngine.Object.Instantiate(mainCanvasContainerPrefab);
-            _mainCanvasContainer = mainCanvasContainerObject.GetComponent<MainCanvasContainer>();
+            _mainCanvasContainer = _container.InstantiateComponent<MainCanvasContainer>(mainCanvasContainerPrefab);
         }
     }
 }

@@ -2,7 +2,7 @@
 {
     public interface ISudokuGridUserIntentEmitter
     {
-        void RequestEdit(int gridId);
+        void RequestEdit(long gridId);
         void RequestCreation();
     }
 }

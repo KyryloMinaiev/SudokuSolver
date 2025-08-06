@@ -8,19 +8,13 @@ namespace Content.Features.MainScreenModule.Scripts
     {
         private readonly IMainScreenStateController _mainScreenStateController;
         private readonly ISudokuGridUserIntentListener _sudokuGridUserIntentListener;
-        private readonly SudokuGridDataPanelViewModel _sudokuGridDataPanelViewModel;
-        private readonly SudokuGridDataCreationPanelViewModel _sudokuGridDataCreationPanelViewModel;
         private MainScreen _mainScreen;
 
         public MainScreenFlowService(IMainScreenStateController mainScreenStateController,
-            ISudokuGridUserIntentListener sudokuGridUserIntentListener,
-            SudokuGridDataPanelViewModel sudokuGridDataPanelViewModel,
-            SudokuGridDataCreationPanelViewModel sudokuGridDataCreationPanelViewModel)
+            ISudokuGridUserIntentListener sudokuGridUserIntentListener)
         {
             _mainScreenStateController = mainScreenStateController;
-            _sudokuGridDataPanelViewModel = sudokuGridDataPanelViewModel;
             _sudokuGridUserIntentListener = sudokuGridUserIntentListener;
-            _sudokuGridDataCreationPanelViewModel = sudokuGridDataCreationPanelViewModel;
             
             _sudokuGridUserIntentListener.OnGridEditRequested += StartSudokuGridDataEdit;
             _sudokuGridUserIntentListener.OnGridCreationRequested += StartSudokuGridDataCreation;
@@ -33,18 +27,15 @@ namespace Content.Features.MainScreenModule.Scripts
 
         public void ShowSudokuGridDataList()
         {
-            _mainScreenStateController.PushState(MainScreenState.SudokuGridDataListState, () =>
-                _mainScreen.ShowSudokuGridDataListPanel(
-                    _sudokuGridDataPanelViewModel));
+            _mainScreenStateController.PushState(MainScreenState.SudokuGridDataListState, _mainScreen.ShowSudokuGridDataListPanel);
         }
 
         public void StartSudokuGridDataCreation()
         {
-            _mainScreenStateController.PushState(MainScreenState.SudokuGridDataCreationState,
-                () => _mainScreen.ShowSudokuGridDataCreationPanel(_sudokuGridDataCreationPanelViewModel));
+            _mainScreenStateController.PushState(MainScreenState.SudokuGridDataCreationState, _mainScreen.ShowSudokuGridDataCreationPanel);
         }
 
-        public void StartSudokuGridDataEdit(int gridID)
+        public void StartSudokuGridDataEdit(long gridID)
         {
         }
 

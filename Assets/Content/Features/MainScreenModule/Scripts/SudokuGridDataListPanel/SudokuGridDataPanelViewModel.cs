@@ -14,8 +14,8 @@ namespace Content.Features.MainScreenModule.Scripts.SudokuGridDataListPanel
 
         public readonly ReactivePropertyList<GridDataCardInfo> SudokuGridDataList = new();
         public UnityAction AddNewSudokuGridDataCommand { get; }
-        public UnityAction<int> DeleteSudokuGridDataCommand { get; }
-        public UnityAction<int> EditSudokuGridDataCommand { get; }
+        public UnityAction<long> DeleteSudokuGridDataCommand { get; }
+        public UnityAction<long> EditSudokuGridDataCommand { get; }
 
         public SudokuGridDataPanelViewModel(ISudokuLibraryContainer sudokuLibraryContainer,
             ISudokuGridUserIntentEmitter sudokuGridUserIntentEmitter)
@@ -80,7 +80,7 @@ namespace Content.Features.MainScreenModule.Scripts.SudokuGridDataListPanel
                 gridData.ChallengesCount, DeleteSudokuGridData, EditSudokuGridData));
         }
 
-        private void EditSudokuGridData(int gridID)
+        private void EditSudokuGridData(long gridID)
         {
             _sudokuGridUserIntentEmitter.RequestEdit(gridID);
         }
@@ -90,7 +90,7 @@ namespace Content.Features.MainScreenModule.Scripts.SudokuGridDataListPanel
             _sudokuGridUserIntentEmitter.RequestCreation();
         }
 
-        private void DeleteSudokuGridData(int gridID)
+        private void DeleteSudokuGridData(long gridID)
         {
             _sudokuLibrary.RemoveGridData(gridID);
         }

@@ -4,13 +4,13 @@ namespace Content.Features.MainScreenModule.Scripts.SudokuGridDataListPanel.Grid
 {
     public struct GridDataCardInfo
     {
-        public readonly int GridID;
+        public readonly long GridID;
         public readonly int Dimension;
         public readonly int ChallengesCount;
-        public readonly Action<int> GridDeleteCommand;
-        public readonly Action<int> GridEditCommand;
+        public readonly Action<long> GridDeleteCommand;
+        public readonly Action<long> GridEditCommand;
 
-        public GridDataCardInfo(int gridID, int dimension, int challengesCount, Action<int> gridDeleteCommand, Action<int> gridEditCommand)
+        public GridDataCardInfo(long gridID, int dimension, int challengesCount, Action<long> gridDeleteCommand, Action<long> gridEditCommand)
         {
             GridID = gridID;
             Dimension = dimension;

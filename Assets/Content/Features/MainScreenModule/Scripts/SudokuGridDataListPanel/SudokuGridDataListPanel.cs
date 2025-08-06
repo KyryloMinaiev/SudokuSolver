@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Content.Features.MainScreenModule.Scripts.SudokuGridDataListPanel.GridCardUI;
+using Core.DIContainer.Scripts;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,13 +12,17 @@ namespace Content.Features.MainScreenModule.Scripts.SudokuGridDataListPanel
         [SerializeField] private Transform _gridDataCardsContainer;
         [SerializeField] private GridDataCard _gridDataCardPrefab;
 
-        private List<GridDataCard> _createdGridDataCards = new List<GridDataCard>();
+        private readonly List<GridDataCard> _createdGridDataCards = new List<GridDataCard>();
         private SudokuGridDataPanelViewModel _viewModel;
 
+        [Inject]
         public void Initialize(SudokuGridDataPanelViewModel viewModel)
         {
             _viewModel = viewModel;
+        }
 
+        private void OnEnable()
+        {
             _viewModel.SudokuGridDataList.Subscribe(UpdateGridDataCards);
             UpdateGridDataCards(_viewModel.SudokuGridDataList.Value);
             _createNewSudokuGridDataButton.onClick.AddListener(_viewModel.AddNewSudokuGridDataCommand);

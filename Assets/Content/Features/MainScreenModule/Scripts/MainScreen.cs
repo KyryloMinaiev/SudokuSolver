@@ -14,21 +14,14 @@ namespace Content.Features.MainScreenModule.Scripts
 
         private MainScreenBasePanel _currentPanel;
         
-        public void Initialize(ApplicationControlPanelViewModel applicationControlPanelViewModel)
-        {
-            _controlPanel.Initialize(applicationControlPanelViewModel);
-        }
-
-        public void ShowSudokuGridDataListPanel(SudokuGridDataPanelViewModel viewModel)
+        public void ShowSudokuGridDataListPanel()
         {
             ShowPanel(_sudokuGridDataListPanel);
-            _sudokuGridDataListPanel.Initialize(viewModel);
         }
 
-        public void ShowSudokuGridDataCreationPanel(SudokuGridDataCreationPanelViewModel viewModel)
+        public void ShowSudokuGridDataCreationPanel()
         {
             ShowPanel(_sudokuGridDataCreationPanel);
-            _sudokuGridDataCreationPanel.Initialize(viewModel);
         }
 
         private void ShowPanel(MainScreenBasePanel panel)

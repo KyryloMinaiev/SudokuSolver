@@ -1,6 +1,5 @@
 ﻿using Content.Features.LibraryLoadingModule.Scripts.Windows;
 using Content.Features.ScreensModule.Scripts;
-using Content.Features.WindowManagerModule.Scripts;
 using Core.DIContainer.Scripts;
 using Global.Scripts.Generated;
 
@@ -10,15 +9,12 @@ namespace Content.Features.LibraryLoadingModule.Scripts
     {
         private readonly LibrarySelectionViewModel _librarySelectionViewModel;
         private readonly IScreenManager _screenManager;
-        private readonly IWindowManager _windowManager;
 
         private LoadingLibraryScreen _loadingLibraryScreen;
 
-        public LoadingLibraryController(IScreenManager screenManager,
-            IWindowManager windowManager, LibrarySelectionViewModel librarySelectionViewModel)
+        public LoadingLibraryController(IScreenManager screenManager, LibrarySelectionViewModel librarySelectionViewModel)
         {
             _screenManager = screenManager;
-            _windowManager = windowManager;
             _librarySelectionViewModel = librarySelectionViewModel;
         }
 
@@ -31,7 +27,6 @@ namespace Content.Features.LibraryLoadingModule.Scripts
         {
             _loadingLibraryScreen = _screenManager.ShowScreen<LoadingLibraryScreen>();
             _librarySelectionViewModel.UpdateViewModel();
-            _loadingLibraryScreen.Initialize(_librarySelectionViewModel, _windowManager);
             _loadingLibraryScreen.OpenSelectLibraryWindow();
         }
 

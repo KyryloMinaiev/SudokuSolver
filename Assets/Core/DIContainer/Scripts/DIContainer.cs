@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Core.DIContainer.Scripts
 {
@@ -25,19 +26,7 @@ namespace Core.DIContainer.Scripts
             var ctor = SelectConstructor(type);
             var parameters = ctor.GetParameters();
 
-            _tempParametersList.Clear();
-            foreach (var parameter in parameters)
-            {
-                if (_savedTypes.TryGetValue(parameter.ParameterType, out var value))
-                {
-                    _tempParametersList.Add(value);
-                }
-                else
-                {
-                    throw new Exception($"Cannot resolve dependency {parameter.ParameterType.Name} for {type.Name}");
-                }
-            }
-
+            FillParameters(_tempParametersList, parameters, type);
             T instance = Activator.CreateInstance(type, _tempParametersList.ToArray()) as T;
             return new BindContainer<T>(instance, this, _defaultTypes);
         }
@@ -99,6 +88,12 @@ namespace Core.DIContainer.Scripts
         {
             gameObject.hideFlags = HideFlags.HideAndDontSave;
             DontDestroyOnLoad(gameObject);
+            RegisterSelf();
+        }
+
+        private void RegisterSelf()
+        {
+            _savedTypes.Add(typeof(DIContainer), this);
         }
 
         private void Update()
@@ -131,6 +126,101 @@ namespace Core.DIContainer.Scripts
             }
 
             _savedTypes.Clear();
+        }
+
+        public GameObject InstantiatePrefab(GameObject prefab)
+        {
+            return InstantiatePrefabInternal(prefab, null);
+        }
+
+        public GameObject InstantiatePrefab(GameObject prefab, Transform parent)
+        {
+            return InstantiatePrefabInternal(prefab, parent);
+        }
+
+        public TComponent InstantiateComponent<TComponent>(Object prefab) where TComponent : MonoBehaviour
+        {
+            GameObject obj = InstantiatePrefab(GetGameObject(prefab));
+            return obj.GetComponent<TComponent>();
+        }
+        
+        public TComponent InstantiateComponent<TComponent>(Object prefab, Transform parent) where TComponent : MonoBehaviour
+        {
+            GameObject obj = InstantiatePrefab(GetGameObject(prefab), parent);
+            return obj.GetComponent<TComponent>();
+        }
+
+        private GameObject GetGameObject(Object prefab)
+        {
+            if (prefab is GameObject gameObject)
+            {
+                return gameObject;
+            }
+            
+            return ((Component)prefab).gameObject;
+        }
+
+        private GameObject InstantiatePrefabInternal(GameObject prefab, Transform parent)
+        {
+            bool prefabIsActive = prefab.activeSelf;
+            prefab.SetActive(false);
+
+            GameObject instance = Instantiate(prefab, parent);
+            Inject(instance);
+
+            if (prefabIsActive)
+            {
+                prefab.SetActive(true);
+                instance.SetActive(true);
+            }
+            
+            return instance;
+        }
+
+        private void Inject(GameObject obj)
+        {
+            var objectComponents = obj.GetComponents<MonoBehaviour>();
+            foreach (var component in objectComponents)
+            {
+                InjectIntoComponent(component);
+            }
+            
+            var childComponents = obj.GetComponentsInChildren<MonoBehaviour>(true);
+            foreach (var component in childComponents)
+            {
+                InjectIntoComponent(component);
+            }
+        }
+
+        private void FillParameters(List<object> parameters, ParameterInfo[] methodParameters, Type type)
+        {
+            parameters.Clear();
+            foreach (var parameter in methodParameters)
+            {
+                if (_savedTypes.TryGetValue(parameter.ParameterType, out var value))
+                {
+                    parameters.Add(value);
+                }
+                else
+                {
+                    throw new Exception($"Cannot resolve dependency {parameter.ParameterType.Name} for {type.Name}");
+                }
+            }
+        }
+
+        private void InjectIntoComponent(MonoBehaviour component)
+        {
+            Type componentType = component.GetType();
+            var methods = componentType
+                .GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                .Where(m => m.GetCustomAttribute<InjectAttribute>() != null);
+
+            foreach (var methodInfo in methods)
+            {
+                var parameters = methodInfo.GetParameters();
+                FillParameters(_tempParametersList, parameters, componentType);
+                methodInfo.Invoke(component, _tempParametersList.ToArray());
+            }
         }
     }
 }

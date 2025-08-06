@@ -8,23 +8,23 @@ namespace Core.SudokuLibraryModule.Scripts
     public class SudokuGridData
     {
         [SerializeField]
-        private int[][] _grid;
+        private int[] _grid;
         [SerializeField]
         private int _size;
         [SerializeField]
         private SerializableDateTime _creationTime;
         [SerializeField]
-        private int _gridID;
+        private long _gridID;
         [SerializeField]
         private int _challengesCount;
         
-        public int[][] Grid => _grid;
+        public int[] Grid => _grid;
         public int Size => _size;
         public DateTime CreationTime => _creationTime;
-        public int GridID => _gridID;
+        public long GridID => _gridID;
         public int ChallengesCount => _challengesCount;
 
-        public SudokuGridData(int[][] grid, int size, DateTime creationTime, int gridID)
+        public SudokuGridData(int[] grid, int size, DateTime creationTime, long gridID)
         {
             _grid = grid;
             _size = size;
