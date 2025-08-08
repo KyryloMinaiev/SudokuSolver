@@ -12,5 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc89c29640a44bd9876111a23affdf8b, type: 3}
   m_Name: ColorSchemeConfiguration
   m_EditorClassIdentifier: 
-  _colorRoles: []
-  _colorSchemes: []
+  _colorRoles:
+  - Name: MainBackground
+    ID: -2093077995
+  _colorSchemes:
+  - _name: Light
+    _colorRoleSettings:
+    - ColorRoleID: -2093077995
+      Color: {r: 1, g: 1, b: 1, a: 1}
+  - _name: Dark
+    _colorRoleSettings:
+    - ColorRoleID: -2093077995
+      Color: {r: 0.09433961, g: 0.09433961, b: 0.09433961, a: 1}
