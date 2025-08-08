@@ -8,6 +8,7 @@ using Content.Features.SolverApplicationStateMachine.Scripts;
 using Content.Features.WindowManagerModule.Scripts;
 using Core.ApplicationModuleSystem.Scripts;
 using Core.AssetLoaderModule.Scripts;
+using Core.ColorSchemeModule.Scripts;
 using Core.DIContainer.Scripts;
 using Core.FileBrowserModule.Scripts;
 using Core.LoadingServiceModule.Scripts;
@@ -35,6 +36,7 @@ namespace Content.Features.SolverApplication.Scripts
             container.Install<AssetLoaderModuleInstaller>();
             container.Install<FileBrowserModuleInstaller>();
             container.Install<SceneLoadingModuleInstaller>();
+            container.Install<ColorSchemeModuleInstaller>();
             container.Install<SudokuLibraryModuleInstaller>();
             container.Install<ScreenManagerModuleInstaller>();
             container.Install<WindowManagerModuleInstaller>();

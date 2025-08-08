@@ -12,6 +12,8 @@ namespace Core.DIContainer.Scripts
         public HashSet<Type> RegisteredDefaultTypes { get; }
         public HashSet<Type> Types { get; }
         
+        public T Value => _value;
+        
         public BindContainer(T value, DIContainer diContainer, HashSet<Type> defaultTypes)
         {
             _value = value;
