@@ -12,7 +12,6 @@ namespace Core.DIContainer.Scripts
         private HashSet<Type> _defaultTypes = new HashSet<Type>
             { typeof(IInitializable), typeof(IDisposable), typeof(IUpdatable), typeof(ILateUpdatable) };
 
-        private readonly HashSet<IInitializable> _initializables = new HashSet<IInitializable>();
         private readonly HashSet<IUpdatable> _updatables = new HashSet<IUpdatable>();
         private readonly HashSet<ILateUpdatable> _lateUpdatables = new HashSet<ILateUpdatable>();
         private readonly HashSet<IDisposable> _disposables = new HashSet<IDisposable>();
@@ -50,7 +49,7 @@ namespace Core.DIContainer.Scripts
 
         public void RegisterBindContainer<T>(BindContainer<T> bindContainer)
         {
-            RegisterInterface<T, IInitializable>(bindContainer, bindContainer.RegisteredDefaultTypes, _initializables);
+            InitializeObject(bindContainer.Value as IInitializable);
             RegisterInterface<T, IUpdatable>(bindContainer, bindContainer.RegisteredDefaultTypes, _updatables);
             RegisterInterface<T, ILateUpdatable>(bindContainer, bindContainer.RegisteredDefaultTypes, _lateUpdatables);
             RegisterInterface<T, IDisposable>(bindContainer, bindContainer.RegisteredDefaultTypes, _disposables);
@@ -71,6 +70,14 @@ namespace Core.DIContainer.Scripts
                 {
                     Debug.LogError($"Type {type} already registered");
                 }
+            }
+        }
+
+        private void InitializeObject(IInitializable initializable)
+        {
+            if (initializable != null)
+            {
+                initializable.Initialize();
             }
         }
 
@@ -98,12 +105,6 @@ namespace Core.DIContainer.Scripts
 
         private void Update()
         {
-            foreach (var initializable in _initializables)
-            {
-                initializable.Initialize();
-            }
-            
-            _initializables.Clear();
             foreach (var updatable in _updatables)
             {
                 updatable.Update();
