@@ -15,15 +15,20 @@ namespace Core.ColorSchemeModule.Scripts
             _assetLoader = assetLoader;
         }
 
-        public async void Initialize()
+        public void Initialize()
         {
-            var configuration = await _assetLoader.LoadAssetAsync<ColorSchemeConfiguration>(Address.ScriptableObjects.ColorSchemeConfiguration);
+            var configuration = _assetLoader.LoadAsset<ColorSchemeConfiguration>(Address.ScriptableObjects.ColorSchemeConfiguration);
             _colorSchemes = configuration.ColorSchemes;
         }
         
         public List<ColorScheme> GetColorSchemes()
         {
             return _colorSchemes;
+        }
+
+        public ColorScheme GetColorScheme(string name)
+        {
+            return _colorSchemes.Find(x => x.Name == name);
         }
     }
 }

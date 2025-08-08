@@ -9,6 +9,8 @@ namespace Core.ColorSchemeModule.Scripts
             container.Bind<ColorSchemeConfigurationProvider>().AsType<IColorSchemeConfigurationProvider>().Register();
             container.Bind<ColorSchemeContainer>().AsType<IColorSchemeContainer>().Register();
             container.Bind<ColorSchemePropertyContainer>().AsType<IColorSchemePropertyContainer>().Register();
+            container.Bind<ColorSchemeLoadingService>().AsType<IColorSchemeLoadingService>().Register();
+            container.Bind<ColorSchemeInitialization>().Register();
         }
     }
 }
